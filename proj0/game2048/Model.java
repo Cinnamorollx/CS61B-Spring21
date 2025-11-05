@@ -5,7 +5,7 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author Cinnamorollx
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -113,13 +113,123 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+        if (side == Side.NORTH) {
+            board.setViewingPerspective(Side.NORTH);
+        } else if (side == Side.WEST) {
+            board.setViewingPerspective(Side.WEST);
+        } else if (side == Side.SOUTH) {
+            board.setViewingPerspective(Side.SOUTH);
+        } else if (side == Side.EAST) {
+            board.setViewingPerspective(Side.EAST);
+        }
+
+        for (int col = 0; col < board.size(); col++) {
+            int limitedRow = board.size();
+            for (int row = board.size() - 1; row >= 0 ; row--) {
+
+                if (row == board.size() - 1) {
+                    continue;
+                }
+
+                Tile t = board.tile(col, row);
+
+                if (t == null) {
+                    continue;
+                }
+
+                int value = t.value();
+
+                int mergedRow = findNeareastRowOnTopThatHasSameValue(board, col, row, value, limitedRow);
+                if (mergedRow != -1) {
+                    boolean merged = board.move(col, mergedRow, t);
+                    changed = true;
+                    if (merged) {
+                        score += 2 * value;
+                    }
+                    limitedRow = mergedRow;
+                    continue;
+                }
+
+                // otherwise no same value on top, just move up if there is an empty space
+                int emptyRow = findLastAvailableEmptyRowOnTop(board, col, row);
+                if (emptyRow != -1) {
+                    board.move(col, emptyRow, t);
+                    changed = true;
+                }
+
+            }
+        }
 
         checkGameOver();
         if (changed) {
             setChanged();
         }
+
+        board.setViewingPerspective(Side.NORTH);
+
         return changed;
     }
+
+    public static int findNeareastRowOnTopThatHasSameValue(Board b, int col, int row, int value, int limitedRow) {
+        for (int i = row + 1; i < limitedRow; i++) {
+            Tile t = b.tile(col, i);
+            if (t != null) {
+                if (t.value() == value) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+//    public static int findNeareastRowOnTopThatIsEmpty(Board b, int col, int row) {
+    ////        for (int i = row + 1; i < b.size(); i++) {
+    ////            if (b.tile(col, i) == null) {
+    ////                return i;
+    ////            }
+    ////        }
+    ////        return -1;
+    ////    }
+    ///
+    ///
+
+    public static int findLastAvailableEmptyRowOnTop(Board b, int col, int row) {
+        if (row + 1 >= b.size() || b.tile(col, row + 1) != null) {
+            return -1;
+        } else {
+            int ans = row + 1;
+            int finalAns = findLastAvailableEmptyRowOnTop(b, col, row + 1);
+            if (finalAns != -1) {
+                ans = finalAns;
+            }
+            return ans;
+        }
+    }
+
+    public static boolean isTopEmpty(Board b, int col, int row) {
+        for (int i = row + 1; i < b.size(); i++) {
+            Tile t = b.tile(col, i);
+            if (t != null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static int howManyTilesOnTop(Board b, int col, int row) {
+        int count = 0;
+        for (int i = row + 1; i < b.size(); i++) {
+                Tile t = b.tile(col, i);
+                if (t != null) {
+                    count ++;
+                }
+        }
+        return count;
+    }
+
+//    public static boolean isValidIndex(Board b, int index) {
+//        return index >= 0 && index < b.size();
+//    }
 
     /** Checks if the game is over and sets the gameOver variable
      *  appropriately.
@@ -138,6 +248,15 @@ public class Model extends Observable {
      * */
     public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
+        int rowNumber = b.size(), colNumber = b.size();
+        for (int i = 0; i < colNumber; i++) {
+            for (int j = 0; j < rowNumber; j++) {
+                if (b.tile(i,j) == null) {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
@@ -148,6 +267,17 @@ public class Model extends Observable {
      */
     public static boolean maxTileExists(Board b) {
         // TODO: Fill in this function.
+        int rowNumber = b.size(), colNumber = b.size();
+        for (int i = 0; i < colNumber; i++) {
+            for (int j = 0; j < rowNumber; j++) {
+                Tile currentTile = b.tile(i, j);
+                if (currentTile != null) {
+                    if (currentTile.value() == MAX_PIECE) {
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
@@ -158,8 +288,61 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+        if (Model.emptySpaceExists(b)) {
+            return true;
+        }
+
+        // board is full at least
+        int colNum = b.size(), rowNum = b.size();
+        for (int i = 0; i < colNum; i++) {
+            for (int j = 0; j < rowNum; j++) {
+                int val = b.tile(i,j).value();
+                boolean canMove = positionNeighborTileHasSameValue(i, j, val, b);
+                if (canMove) {
+                    return canMove;
+                }
+            }
+        }
         return false;
+    }
+
+    private static boolean positionNeighborTileHasSameValue(int col, int row, int value, Board b) {
+        // top
+        if (isValidPosition(b, col, row - 1)) {
+            if (b.tile(col, row - 1).value() == value) {
+                return true;
+            }
+        }
+        // left
+        if (isValidPosition(b, col - 1, row)) {
+            if (b.tile(col - 1, row).value() == value) {
+                return true;
+            }
+        }
+        // bottom
+        if (isValidPosition(b, col, row + 1)) {
+            if (b.tile(col, row + 1).value() == value) {
+                return true;
+            }
+        }
+        // right
+        if (isValidPosition(b, col + 1, row)) {
+            if (b.tile(col + 1, row).value() == value) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean isValidPosition(Board b, int col, int row) {
+        if (col < 0 || col >= b.size()) {
+            return false;
+        } else if (row < 0 || row >= b.size()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 
