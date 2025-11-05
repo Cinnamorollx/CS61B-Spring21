@@ -182,17 +182,6 @@ public class Model extends Observable {
         return -1;
     }
 
-//    public static int findNeareastRowOnTopThatIsEmpty(Board b, int col, int row) {
-    ////        for (int i = row + 1; i < b.size(); i++) {
-    ////            if (b.tile(col, i) == null) {
-    ////                return i;
-    ////            }
-    ////        }
-    ////        return -1;
-    ////    }
-    ///
-    ///
-
     public static int findLastAvailableEmptyRowOnTop(Board b, int col, int row) {
         if (row + 1 >= b.size() || b.tile(col, row + 1) != null) {
             return -1;
@@ -206,30 +195,6 @@ public class Model extends Observable {
         }
     }
 
-    public static boolean isTopEmpty(Board b, int col, int row) {
-        for (int i = row + 1; i < b.size(); i++) {
-            Tile t = b.tile(col, i);
-            if (t != null) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public static int howManyTilesOnTop(Board b, int col, int row) {
-        int count = 0;
-        for (int i = row + 1; i < b.size(); i++) {
-                Tile t = b.tile(col, i);
-                if (t != null) {
-                    count ++;
-                }
-        }
-        return count;
-    }
-
-//    public static boolean isValidIndex(Board b, int index) {
-//        return index >= 0 && index < b.size();
-//    }
 
     /** Checks if the game is over and sets the gameOver variable
      *  appropriately.
