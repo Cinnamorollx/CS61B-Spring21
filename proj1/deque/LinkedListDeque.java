@@ -7,7 +7,8 @@ public class LinkedListDeque<T> {
 
     public LinkedListDeque() {
         this.size = 0;
-        sentinel = new ItemNode();
+        this.sentinel = new ItemNode();
+        this.connectNodes(this.sentinel, this.sentinel); //this.sentinel.next = this.sentinel; this.sentinel.prev = this.sentinel;
     }
 
     public class ItemNode {
@@ -30,21 +31,27 @@ public class LinkedListDeque<T> {
 
     public void addFirst(T item) {
         ItemNode currentHeadNode = this.sentinel.next;
-        if (currentHeadNode != null) {
-            this.sentinel.next = new ItemNode(item);
-            this.sentinel.next.prev = this.sentinel;
-//            this.sentinel.next.next = currentHeadNode;
-//            currentHeadNode.prev = this.sentinel.next;
-            connectNodes(this.sentinel.next, currentHeadNode);
-        } else {
-            // first time add node
-            this.sentinel.next = new ItemNode(item);
-            this.sentinel.next.prev = this.sentinel;
-            // circular
-//            this.sentinel.next.next = this.sentinel;
-//            this.sentinel.prev = this.sentinel.next;
-            this.connectNodes(this.sentinel.next, this.sentinel);
-        }
+
+        ItemNode newItemNode = new ItemNode(item);
+
+        this.connectNodes(this.sentinel, newItemNode);
+        this.connectNodes(newItemNode, currentHeadNode);
+
+//        if (currentHeadNode != null) {
+//            this.sentinel.next = new ItemNode(item);
+//            this.sentinel.next.prev = this.sentinel;
+////            this.sentinel.next.next = currentHeadNode;
+////            currentHeadNode.prev = this.sentinel.next;
+//            connectNodes(this.sentinel.next, currentHeadNode);
+//        } else {
+//            // first time add node
+//            this.sentinel.next = new ItemNode(item);
+//            this.sentinel.next.prev = this.sentinel;
+//            // circular
+////            this.sentinel.next.next = this.sentinel;
+////            this.sentinel.prev = this.sentinel.next;
+//            this.connectNodes(this.sentinel.next, this.sentinel);
+//        }
 
         this.size++;
     }
@@ -53,18 +60,24 @@ public class LinkedListDeque<T> {
 
         ItemNode currentTailNode = this.sentinel.prev;
 
-        if (currentTailNode != null) {
-            this.sentinel.prev = new ItemNode(item);
-            this.sentinel.prev.next = this.sentinel;
-            this.sentinel.prev.prev = currentTailNode;
-            currentTailNode.next = this.sentinel.prev;
-        } else {
-            // first time add node
-            this.sentinel.prev = new ItemNode(item);
-            this.sentinel.prev.next = this.sentinel;
-            this.sentinel.next = this.sentinel.prev;
-            this.sentinel.prev.prev = this.sentinel;
-        }
+        ItemNode newItemNode= new ItemNode(item);
+
+        this.connectNodes(newItemNode, this.sentinel);
+        this.connectNodes(currentTailNode, newItemNode);
+
+
+//        if (currentTailNode != null) {
+//            this.sentinel.prev = new ItemNode(item);
+//            this.sentinel.prev.next = this.sentinel;
+//            this.sentinel.prev.prev = currentTailNode;
+//            currentTailNode.next = this.sentinel.prev;
+//        } else {
+//            // first time add node
+//            this.sentinel.prev = new ItemNode(item);
+//            this.sentinel.prev.next = this.sentinel;
+//            this.sentinel.next = this.sentinel.prev;
+//            this.sentinel.prev.prev = this.sentinel;
+//        }
 
         this.size++;
     }
@@ -72,14 +85,15 @@ public class LinkedListDeque<T> {
     public T removeFirst() {
         if (this.size() > 0) {
             ItemNode headNode = this.sentinel.next;
-            if (headNode.next == this.sentinel) {
-                headNode.next = null;
-                headNode.prev = null;
-                this.sentinel.next = null;
-                this.sentinel.prev = null;
-            } else {
-                this.connectNodes(this.sentinel, headNode.next);
-            }
+//            if (headNode.next == this.sentinel) {
+//                headNode.next = null;
+//                headNode.prev = null;
+//                this.sentinel.next = this.sentinel;
+//                this.sentinel.prev = this.sentinel;
+//            } else {
+//                this.connectNodes(this.sentinel, headNode.next);
+//            }
+            this.connectNodes(this.sentinel, headNode.next);
             this.size--;
             return headNode.item;
         } else {
@@ -90,14 +104,15 @@ public class LinkedListDeque<T> {
     public T removeLast() {
         if (this.size() > 0) {
             ItemNode tailNode = this.sentinel.prev;
-            if (tailNode.prev == this.sentinel) {
-                tailNode.prev = null;
-                tailNode.next = null;
-                this.sentinel.prev = null;
-                this.sentinel.next = null;
-            } else {
-                connectNodes(tailNode.prev, this.sentinel);
-            }
+//            if (tailNode.prev == this.sentinel) {
+//                tailNode.prev = null;
+//                tailNode.next = null;
+//                this.sentinel.prev = null;
+//                this.sentinel.next = null;
+//            } else {
+//                connectNodes(tailNode.prev, this.sentinel);
+//            }
+            this.connectNodes(tailNode.prev, this.sentinel);
             this.size--;
             return tailNode.item;
         } else {
