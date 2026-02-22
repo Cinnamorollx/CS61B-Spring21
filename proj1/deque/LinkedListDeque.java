@@ -130,7 +130,7 @@ public class LinkedListDeque<T> {
             return null;
         }
 
-        ItemNode curNode = this.sentinel;
+        ItemNode curNode = this.sentinel.next;
 
         for (int i = 0; i < index; i++) {
             curNode = curNode.next;
@@ -160,6 +160,11 @@ public class LinkedListDeque<T> {
     }
 
     public void printDeque() {
+
+        if (size == 0) {
+            return;
+        }
+
         ItemNode curNode = this.sentinel.next;
         String result = "";
         result += curNode.item.toString();

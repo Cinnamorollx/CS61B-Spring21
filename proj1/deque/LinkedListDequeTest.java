@@ -112,6 +112,9 @@ public class LinkedListDequeTest {
             lld1.addLast(i);
         }
 
+        assertEquals((Integer) 0, lld1.get(0));
+        assertEquals((Integer) 14, lld1.get(14));
+
         for (double i = 0; i < 500000; i++) {
             assertEquals("Should have the same value", i, (double) lld1.removeFirst(), 0.0);
         }
@@ -119,6 +122,8 @@ public class LinkedListDequeTest {
         for (double i = 999999; i > 500000; i--) {
             assertEquals("Should have the same value", i, (double) lld1.removeLast(), 0.0);
         }
+
+
 
 
     }
