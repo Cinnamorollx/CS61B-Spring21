@@ -1,19 +1,18 @@
 package deque;
 
 
-public class ArrayDeque<T> {
+public class ArrayDeque<T> implements Deque<T> {
 
     private int size;
     private T[] items;
     private int nextFirstIndex;
     private int nextLastIndex;
-    private int currentOriginIndex; // 目前的circular起始点
+    private static int RFACTOR = 2;
 
     public ArrayDeque() {
         int startSize = 8;
         items = (T[]) new Object[startSize];
         size = 0;
-        currentOriginIndex = 0;
         nextFirstIndex = 0;
         nextLastIndex = 1;
     }
@@ -21,7 +20,7 @@ public class ArrayDeque<T> {
     public void addFirst(T item) {
 
         if (size == items.length) {
-            resize(size * 2);
+            resize(size * RFACTOR);
         }
 
         items[nextFirstIndex] = item;
@@ -33,17 +32,13 @@ public class ArrayDeque<T> {
     public void addLast(T item) {
 
         if (size == items.length) {
-            resize(size * 2);
+            resize(size * RFACTOR);
         }
 
         items[nextLastIndex] = item;
         // 维护nextLastIndex状态
         nextLastIndex = getIndexNextOffsetHelper(nextLastIndex, 1);
         size++;
-    }
-
-    public boolean isEmpty() {
-        return size == 0;
     }
 
     public int size() {
@@ -93,7 +88,7 @@ public class ArrayDeque<T> {
             nextFirstIndex = firstIndex;
             size--;
             if (size <= items.length / 4 && items.length > 16) {
-                resize(items.length / 2);
+                resize(items.length / RFACTOR);
             }
             return result;
         } else {
@@ -109,7 +104,7 @@ public class ArrayDeque<T> {
             nextLastIndex = lastIndex;
             size--;
             if (size <= (items.length / 4) && items.length > 16) {
-                resize(items.length / 2);
+                resize(items.length / RFACTOR);
             }
             return result;
         } else {

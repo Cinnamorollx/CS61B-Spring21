@@ -1,6 +1,6 @@
 package deque;
 
-public class LinkedListDeque<T> {
+public class LinkedListDeque<T> implements Deque<T> {
     private int size;
     ItemNode sentinel;
 
@@ -153,10 +153,6 @@ public class LinkedListDeque<T> {
         } else {
             return getRecursiveNode(index --, curNode.next);
         }
-    }
-
-    public boolean isEmpty() {
-        return this.size() == 0;
     }
 
     public void printDeque() {
