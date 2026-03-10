@@ -17,6 +17,7 @@ public class ArrayDeque<T> implements Deque<T> {
         nextLastIndex = 1;
     }
 
+    @Override
     public void addFirst(T item) {
 
         if (size == items.length) {
@@ -29,6 +30,7 @@ public class ArrayDeque<T> implements Deque<T> {
         size++;
     }
 
+    @Override
     public void addLast(T item) {
 
         if (size == items.length) {
@@ -41,17 +43,19 @@ public class ArrayDeque<T> implements Deque<T> {
         size++;
     }
 
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public void printDeque() {
         if (size == 0) {
             return;
         }
         StringBuilder sb = new StringBuilder();
         int firstIndex = getIndexNextOffsetHelper(nextFirstIndex, 1);
-        int lastIndex = getIndexNextOffsetHelper(nextLastIndex, - 1);
+        int lastIndex = getIndexNextOffsetHelper(nextLastIndex, -1);
 
         if (firstIndex <= lastIndex) {
             for (int i = firstIndex; i <= lastIndex; i++) {
@@ -80,6 +84,7 @@ public class ArrayDeque<T> implements Deque<T> {
         System.out.println(sb.toString());
     }
 
+    @Override
     public T removeFirst() {
         if (size > 0) {
             int firstIndex = getIndexNextOffsetHelper(nextFirstIndex, 1);
@@ -96,6 +101,7 @@ public class ArrayDeque<T> implements Deque<T> {
         }
     }
 
+    @Override
     public T removeLast() {
         if (size > 0) {
             int lastIndex = getIndexNextOffsetHelper(nextLastIndex, -1);
@@ -112,6 +118,7 @@ public class ArrayDeque<T> implements Deque<T> {
         }
     }
 
+    @Override
     public T get(int index) {
         if (index < size && index >= 0) {
             int first = getIndexNextOffsetHelper(nextFirstIndex, 1);
@@ -148,5 +155,10 @@ public class ArrayDeque<T> implements Deque<T> {
         } else {
             return index + offset;
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }
