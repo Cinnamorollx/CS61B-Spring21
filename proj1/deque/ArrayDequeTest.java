@@ -1,6 +1,7 @@
 package deque;
 
 import edu.princeton.cs.algs4.StdRandom;
+import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -73,5 +74,18 @@ public class ArrayDequeTest {
                 assertEquals(val1, val2);
             }
         }
+    }
+
+    @Test
+    public void ArrayDequeEqualTest() {
+        ArrayDeque<String> ad = new ArrayDeque<>();
+        LinkedListDeque<String> lld = new LinkedListDeque<>();
+        ad.addFirst("arima");
+        ad.addFirst("Kana");
+        ad.addFirst("Kawaii");
+        lld.addFirst("arima");
+        lld.addFirst("Kana");
+        lld.addFirst("Kawaii");
+        Assert.assertTrue(ad.equals(lld));
     }
 }

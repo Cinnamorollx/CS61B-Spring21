@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     private int size;
-    ItemNode sentinel;
+    private ItemNode sentinel;
 
 
     public LinkedListDeque() {
@@ -40,22 +40,6 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         this.connectNodes(this.sentinel, newItemNode);
         this.connectNodes(newItemNode, currentHeadNode);
 
-//        if (currentHeadNode != null) {
-//            this.sentinel.next = new ItemNode(item);
-//            this.sentinel.next.prev = this.sentinel;
-////            this.sentinel.next.next = currentHeadNode;
-////            currentHeadNode.prev = this.sentinel.next;
-//            connectNodes(this.sentinel.next, currentHeadNode);
-//        } else {
-//            // first time add node
-//            this.sentinel.next = new ItemNode(item);
-//            this.sentinel.next.prev = this.sentinel;
-//            // circular
-////            this.sentinel.next.next = this.sentinel;
-////            this.sentinel.prev = this.sentinel.next;
-//            this.connectNodes(this.sentinel.next, this.sentinel);
-//        }
-
         this.size++;
     }
 
@@ -69,20 +53,6 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         this.connectNodes(newItemNode, this.sentinel);
         this.connectNodes(currentTailNode, newItemNode);
 
-
-//        if (currentTailNode != null) {
-//            this.sentinel.prev = new ItemNode(item);
-//            this.sentinel.prev.next = this.sentinel;
-//            this.sentinel.prev.prev = currentTailNode;
-//            currentTailNode.next = this.sentinel.prev;
-//        } else {
-//            // first time add node
-//            this.sentinel.prev = new ItemNode(item);
-//            this.sentinel.prev.next = this.sentinel;
-//            this.sentinel.next = this.sentinel.prev;
-//            this.sentinel.prev.prev = this.sentinel;
-//        }
-
         this.size++;
     }
 
@@ -90,14 +60,6 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     public T removeFirst() {
         if (this.size() > 0) {
             ItemNode headNode = this.sentinel.next;
-//            if (headNode.next == this.sentinel) {
-//                headNode.next = null;
-//                headNode.prev = null;
-//                this.sentinel.next = this.sentinel;
-//                this.sentinel.prev = this.sentinel;
-//            } else {
-//                this.connectNodes(this.sentinel, headNode.next);
-//            }
             this.connectNodes(this.sentinel, headNode.next);
             this.size--;
             return headNode.item;
@@ -110,14 +72,6 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     public T removeLast() {
         if (this.size() > 0) {
             ItemNode tailNode = this.sentinel.prev;
-//            if (tailNode.prev == this.sentinel) {
-//                tailNode.prev = null;
-//                tailNode.next = null;
-//                this.sentinel.prev = null;
-//                this.sentinel.next = null;
-//            } else {
-//                connectNodes(tailNode.prev, this.sentinel);
-//            }
             this.connectNodes(tailNode.prev, this.sentinel);
             this.size--;
             return tailNode.item;
@@ -198,7 +152,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 
         @Override
         public boolean hasNext() {
-            return curNode!= null && curNode.next != LinkedListDeque.this.sentinel;
+            return curNode != sentinel && curNode.next != LinkedListDeque.this.sentinel;
         }
 
         @Override
@@ -217,10 +171,10 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         if (obj == null) {
             return false;
         }
-        if (obj.getClass() != this.getClass()) {
+        if (!(obj instanceof Deque)) {
             return false;
         }
-        LinkedListDeque<T> o = (LinkedListDeque<T>) obj;
+        Deque<T> o = (Deque<T>) obj;
 
         if (o.size() != this.size()) {
             return false;
