@@ -10,7 +10,8 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     public LinkedListDeque() {
         this.size = 0;
         this.sentinel = new ItemNode();
-        this.connectNodes(this.sentinel, this.sentinel); //this.sentinel.next = this.sentinel; this.sentinel.prev = this.sentinel;
+        this.connectNodes(this.sentinel, this.sentinel);
+        //this.sentinel.next = this.sentinel; this.sentinel.prev = this.sentinel;
     }
 
     public class ItemNode {
@@ -48,7 +49,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 
         ItemNode currentTailNode = this.sentinel.prev;
 
-        ItemNode newItemNode= new ItemNode(item);
+        ItemNode newItemNode = new ItemNode(item);
 
         this.connectNodes(newItemNode, this.sentinel);
         this.connectNodes(currentTailNode, newItemNode);
@@ -104,7 +105,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         if (index >= this.size()) {
             return null;
         }
-        ItemNode targetNode = getRecursiveNode(index, this.sentinel);
+        ItemNode targetNode = getRecursiveNode(index, this.sentinel.next);
         return targetNode.item;
     }
 
@@ -112,7 +113,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         if (index == 0) {
             return curNode;
         } else {
-            return getRecursiveNode(index --, curNode.next);
+            return getRecursiveNode(index--, curNode.next);
         }
     }
 
@@ -190,7 +191,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
             if (!val1.equals(val2)) {
                 return false;
             }
-            index ++;
+            index++;
         }
 
         return true;

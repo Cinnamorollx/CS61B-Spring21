@@ -137,4 +137,12 @@ public class LinkedListDequeTest {
         lld.addFirst("Kawaii");
         Assert.assertTrue(lld.equals(ad));
     }
+
+    @Test
+    public void LinkedListGetRecursiveTest() {
+        LinkedListDeque<String> lld = new LinkedListDeque<>();
+        lld.addLast("KanaChan");
+        String s =  lld.getRecursive(0);
+        assertEquals("KanaChan", s);
+    }
 }
