@@ -71,7 +71,9 @@ public class ArrayDequeTest {
                 int randVal = StdRandom.uniform(0, 1000);
                 Integer val1 = ld.get(randVal);
                 Integer val2 = ad.get(randVal);
+                Integer val3 = ld.getRecursive(randVal);
                 assertEquals(val1, val2);
+                assertEquals(val1, val3);
             }
         }
     }

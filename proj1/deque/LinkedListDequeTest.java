@@ -2,6 +2,9 @@ package deque;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Iterator;
+
 import static org.junit.Assert.*;
 
 
@@ -144,5 +147,28 @@ public class LinkedListDequeTest {
         lld.addLast("KanaChan");
         String s =  lld.getRecursive(0);
         assertEquals("KanaChan", s);
+    }
+
+    @Test
+    public void LinkedListIteratorTest() {
+        LinkedListDeque<String> lld = new LinkedListDeque<>();
+        lld.addLast("asdad1");
+        lld.addLast("asdad2");
+        lld.addLast("asdad3");
+        lld.addLast("asdad44");
+        lld.addLast("asdad5");
+        lld.addLast("asdad6");
+        lld.addLast("asdad7");
+        lld.addFirst("asdad812");
+        lld.addFirst("asdad8213");
+        lld.addFirst("asdad8123");
+        lld.addFirst("asdad8323");
+        lld.addFirst("asdad82323");
+        lld.addFirst("asdad83332");
+        Iterator<String> iterator = lld.iterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+
     }
 }

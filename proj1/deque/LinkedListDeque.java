@@ -113,7 +113,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         if (index == 0) {
             return curNode;
         } else {
-            return getRecursiveNode(index--, curNode.next);
+            return getRecursiveNode(--index, curNode.next);
         }
     }
 
@@ -153,7 +153,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 
         @Override
         public boolean hasNext() {
-            return curNode != sentinel && curNode.next != LinkedListDeque.this.sentinel;
+            return curNode != sentinel;
         }
 
         @Override
