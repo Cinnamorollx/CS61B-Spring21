@@ -180,17 +180,17 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
             return false;
         }
         Iterator<T> iterator1 = this.iterator();
-        Iterator<T> iterator2 = o.iterator();
-
+        int index = 0;
         while (iterator1.hasNext()) {
-            if (!iterator2.hasNext()) {
+            if (index >= o.size()) {
                 return false;
             }
             T val1 = iterator1.next();
-            T val2 = iterator2.next();
+            T val2 = o.get(index);
             if (!val1.equals(val2)) {
                 return false;
             }
+            index ++;
         }
 
         return true;
