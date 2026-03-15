@@ -1,13 +1,12 @@
 package gh2;
-import deque.ArrayDeque;
 import edu.princeton.cs.algs4.StdAudio;
 import edu.princeton.cs.algs4.StdDraw;
 
 public class GuitarHero {
 
-    private static final String keyboard = "q2we4r5ty7u8i9op-[=zxdcfvgbnjmk,.;/' ";
+    private static final String KEYBOARD = "q2we4r5ty7u8i9op-[=zxdcfvgbnjmk,.;/' ";
     private GuitarString[] guitarStringArr;
-    private static final double baseConcert = 440.0;
+    private static final double BASECONCERT = 440.0;
 
 
     public static void main(String[] args) {
@@ -16,7 +15,7 @@ public class GuitarHero {
             GuitarString ggs = null;
             if (StdDraw.hasNextKeyTyped()) {
                 char key = StdDraw.nextKeyTyped();
-                int index = keyboard.indexOf(key);
+                int index = KEYBOARD.indexOf(key);
                 if (index != -1) {
                     GuitarString gs = gh.guitarStringArr[index];
                     gs.pluck();
@@ -33,7 +32,7 @@ public class GuitarHero {
 
 
     public GuitarHero() {
-        int length = keyboard.length();
+        int length = KEYBOARD.length();
         guitarStringArr = new GuitarString[length];
         for (int i = 0; i < length; i++) {
             double concert = getConcertHelper(i);
@@ -42,7 +41,7 @@ public class GuitarHero {
     }
 
     private static double getConcertHelper(int i) {
-        return baseConcert * Math.pow(2, (i - 24) / 12.0);
+        return BASECONCERT * Math.pow(2, (i - 24) / 12.0);
     }
 
     public double getAllSample() {
