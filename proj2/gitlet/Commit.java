@@ -7,10 +7,10 @@ import jdk.jshell.execution.Util;
 import java.io.File;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Date; // TODO: You'll likely use this in this class
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 /** Represents a gitlet commit object.
  *  TODO: It's a good idea to give a description here of what else this Class
@@ -29,8 +29,6 @@ public class Commit implements Serializable {
     static String INITIAL_MESSAGE = "initial commit";
 
     private String parentCommitID;
-
-    private String commitID; // if needed
 
     private String author;
 
@@ -69,6 +67,22 @@ public class Commit implements Serializable {
         firstCommit.timeStamp = Instant.EPOCH;
         firstCommit.message = INITIAL_MESSAGE;
         return firstCommit;
+    }
+
+    public String getParentCommitID() {
+        return this.parentCommitID;
+    }
+
+    public String getPrintedTimeStamp() {
+        Instant instant = this.timeStamp;
+        ZonedDateTime zdt = instant.atZone(ZoneId.systemDefault());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss yyyy Z", Locale.ENGLISH);
+        String timeStamp = zdt.format(formatter);
+        return timeStamp;
+    }
+
+    public String getMessage() {
+        return this.message;
     }
 
 }

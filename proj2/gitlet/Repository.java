@@ -5,6 +5,7 @@ import jdk.jshell.execution.Util;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import static gitlet.Utils.*;
@@ -83,6 +84,28 @@ public class Repository {
         Commit commit = new Commit(fileBlobMap, message, parentCommitID);
         saveCommit(commit);
         updateHeadCommit(commit);
+    }
+
+    public static void printLog() {
+        String headID = getCurrentHeadCommitID();
+        Commit head = getCommitWithID(headID);
+        StringBuilder outputSB = new StringBuilder();
+
+        while (head != null) {
+            outputSB.append("===\n");
+            String commitID = getSha1ID(head);
+            outputSB.append("commit " + commitID+ "\n");
+            String timeStamp = head.getPrintedTimeStamp();
+            outputSB.append("Date: " + timeStamp + "\n");
+            String message = head.getMessage();
+            outputSB.append(message + "\n" + "\n");
+            String parentID = head.getParentCommitID();
+            Commit parentCommit = getCommitWithID(parentID);
+            head = parentCommit;
+        }
+
+        String output = outputSB.toString();
+        Utils.message(output);
     }
 
     public static void saveCommit(Commit commit) {
@@ -179,8 +202,26 @@ public class Repository {
     }
 
     public static File getCommitFileWithID(String commitID) {
+        if (commitID == null) {
+            return null;
+        }
         File file = Utils.join(GITLET_COMMITFOLDER, commitID);
         return file;
+    }
+
+    public static Commit getCommitWithID(String commitID) {
+        File file = getCommitFileWithID(commitID);
+        if (file == null) {
+            return null;
+        }
+        Commit commit = Utils.readObject(file, Commit.class);
+        return commit;
+    }
+
+    public static Blob getBlobWithID(String blobID) {
+        File file = getBlobFileWithID(blobID);
+        Blob blob = Utils.readObject(file, Blob.class);
+        return blob;
     }
 
     public static File getBlobFileWithID(String blobID) {

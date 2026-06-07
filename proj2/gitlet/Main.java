@@ -34,8 +34,9 @@ public class Main {
                 } else {
                     Utils.message("Please enter a commit message.");
                 }
+                break;
             case "log" :
-                //TODO: log
+                Repository.printLog();
             case "checkout":
                 //TODO: checkout a file to a commit
                 if (args.length > 3) {
@@ -58,6 +59,7 @@ public class Main {
                 } else if (args.length > 1){
                     //todo checkout branch.
                 }
+                break;
         }
     }
 }
